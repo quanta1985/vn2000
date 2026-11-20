@@ -1,0 +1,11 @@
+# owner's personal-site pages and the server upload script stay local
+homepage/
+deploy.sh
+.claude/
+# design-process scratch
+.impeccable/mocks/
+.impeccable/questions/
+.impeccable/review/
+# test output
+test/shots/
+__pycache__/

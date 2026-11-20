@@ -1,0 +1,13 @@
+Copyright © 2026 Trần Anh Quân (Quan Tran-Anh). All rights reserved.
+
+The VN2000 ⇄ WGS84 converter is free to use online at https://quanta1985.github.io/vn2000/.
+
+The source code, text and design in this repository may not be copied, modified,
+redistributed or republished, in whole or in part, without the author's written
+permission. Making this repository publicly visible does not grant any licence.
+
+Third-party components keep their own licences:
+- Leaflet 1.9.4 (vendor/leaflet/) — BSD 2-Clause, see vendor/leaflet/LICENSE.
+- Overpass and Overpass Mono fonts (fonts/) — SIL Open Font License 1.1, see fonts/OFL.txt.
+
+Contact: quantrananh.humg@gmail.com

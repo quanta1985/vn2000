@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>VN2000 ⇄ WGS84 · Chuyển đổi tọa độ 34 tỉnh/thành</title>
+<meta name="description" content="Chuyển đổi tọa độ VN-2000 (kinh tuyến trục 34 tỉnh/thành sau sáp nhập 2025), UTM và WGS84; vẽ, đo, xuất KML/CSV/GeoJSON/SHP/DXF, ảnh bản đồ. Trần Anh Quân, HUMG · REMOSAT Lab, USTH.">
+<meta name="author" content="Trần Anh Quân (Quan Tran-Anh)">
+<meta name="copyright" content="© 2026 Trần Anh Quân (Quan Tran-Anh). All rights reserved.">
+<meta property="og:title" content="VN2000 ⇄ UTM ⇄ WGS84">
+<meta property="og:description" content="Chuyển đổi tọa độ VN-2000 / UTM / WGS84 cho 34 tỉnh/thành mới. Vẽ, đo, xuất KML/CSV/DXF.">
+<meta name="theme-color" content="#fafaf7">
+<link rel="canonical" href="https://quanta1985.github.io/vn2000/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23fafaf7'/%3E%3Crect x='3' y='3' width='26' height='26' fill='none' stroke='%23111' stroke-width='2'/%3E%3Cpath d='M16 8 23 21H9z' fill='none' stroke='%23c8102e' stroke-width='2.4'/%3E%3Ccircle cx='16' cy='16.5' r='1.6' fill='%23c8102e'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-point" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/></symbol>
+    <symbol id="i-trig" viewBox="0 0 24 24"><path d="M12 4 21 19H3z"/><circle cx="12" cy="14" r="1.4"/></symbol>
+    <symbol id="i-line" viewBox="0 0 24 24"><path d="M4 18 10 8l5 6 5-9"/></symbol>
+    <symbol id="i-poly" viewBox="0 0 24 24"><path d="m5 8 7-4 7 5-2 9H7z"/></symbol>
+    <symbol id="i-cursor" viewBox="0 0 24 24"><path d="m5 3 14 7-6 2-2 6z"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V3m0 0L8 7m4-4 4 4M4 15v5h16v-5"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 15v5h16v-5"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11"/><path d="M5 15V4h11"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/></symbol>
+    <symbol id="i-locate" viewBox="0 0 24 24"><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5zM3 13l9 5 9-5"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></symbol>
+    <symbol id="i-wand" viewBox="0 0 24 24"><path d="m3 21 12-12M15 4V2M15 10V8M11 6h2M17 6h2"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-fit" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H5v18h14V8zM14 3v5h5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-swap" viewBox="0 0 24 24"><path d="M7 4v16m0 0-3-3m3 3 3-3M17 20V4m0 0-3 3m3-3 3 3"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="16" cy="9.5" r="1.5"/></symbol>
+    <symbol id="i-handle" viewBox="0 0 24 24"><path d="M4 9h16M4 15h16"/></symbol>
+  </defs>
+</svg>
+
+<aside id="panel" class="margin" aria-label="Converter" data-snap="half">
+  <header class="title-block">
+    <button type="button" class="handle only-mobile" id="sheetHandle" data-i18n-title="togglePanel"><svg><use href="#i-handle"/></svg></button>
+    <div class="title-row">
+      <h1>VN2000 <span aria-hidden="true">⇄</span> WGS84</h1>
+      <div class="seg seg-sm" role="group" aria-label="Language">
+        <button type="button" data-lang="vi">VI</button><button type="button" data-lang="en">EN</button>
+      </div>
+    </div>
+    <p class="subtitle" data-i18n="subtitle">Chuyển đổi tọa độ · UTM · 34 tỉnh/thành sau sáp nhập</p>
+  </header>
+
+  <section class="block meridian">
+    <label for="provinceSel" class="lbl" data-i18n="vnZone">Kinh tuyến trục · tỉnh/thành</label>
+    <div class="mer-row">
+      <select id="provinceSel"></select>
+      <output id="merBig" class="mer-big" aria-live="polite">105°00′</output>
+    </div>
+    <input id="customMeridian" type="text" inputmode="decimal" placeholder="105°45′ / 105.75" aria-label="Custom central meridian" hidden>
+    <p class="mer-meta"><span id="zoneChip">k 0.9999 · múi 3°</span> · <span id="convChip" data-i18n-title="convTip">EPSG:6960 · CF</span></p>
+  </section>
+
+  <nav class="tabs" role="tablist">
+    <button type="button" role="tab" data-tab="convert" class="active" data-i18n="tabConvert">Chuyển đổi</button>
+    <button type="button" role="tab" data-tab="draw" data-i18n="tabDraw">Vẽ &amp; Đo</button>
+    <button type="button" role="tab" data-tab="info" data-i18n="tabInfo">Thông tin</button>
+  </nav>
+
+  <div class="tab-body">
+    <!-- CONVERT -->
+    <section class="tab-pane active" data-pane="convert">
+      <div class="field">
+        <span class="lbl" data-i18n="inputSys">Hệ tọa độ đầu vào</span>
+        <div class="seg seg-full" id="inCrsSeg" role="radiogroup">
+          <button type="button" data-crs="vn">VN-2000</button>
+          <button type="button" data-crs="utm">UTM</button>
+          <button type="button" data-crs="wgs">WGS84</button>
+        </div>
+        <div class="row-inline" id="utmZoneRow" hidden>
+          <label class="lbl" for="utmZoneSel" data-i18n="utmZone">Múi UTM</label>
+          <select id="utmZoneSel"><option value="47">47N · 96–102°E</option><option value="48" selected>48N · 102–108°E</option><option value="49">49N · 108–114°E</option><option value="50">50N · 114–120°E</option></select>
+        </div>
+      </div>
+
+      <div class="seg seg-full seg-line" id="modeSeg" role="tablist">
+        <button type="button" data-mode="single" data-i18n="single">Một điểm</button>
+        <button type="button" data-mode="multi" data-i18n="multi">Nhiều điểm</button>
+      </div>
+
+      <div id="singleBox" class="stack">
+        <div class="pair">
+          <label class="fld"><span id="lblA">X (Bắc)</span><input id="inA" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="2328573.123"></label>
+          <button type="button" class="icon-btn swap" id="swapBtn" data-i18n-title="swap"><svg><use href="#i-swap"/></svg></button>
+          <label class="fld"><span id="lblB">Y (Đông)</span><input id="inB" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="588612.456"></label>
+        </div>
+        <div id="singleOut" class="results" aria-live="polite"></div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="singleAdd"><svg><use href="#i-point"/></svg><span data-i18n="addToMap">Đặt lên bản đồ</span></button>
+          <button type="button" class="btn" id="singleFly"><svg><use href="#i-target"/></svg><span data-i18n="flyTo">Bay tới</span></button>
+        </div>
+      </div>
+
+      <div id="multiBox" class="stack" hidden>
+        <div class="drop" id="dropZone">
+          <textarea id="multiIn" spellcheck="false" data-i18n-ph="multiPh" aria-label="Coordinates"></textarea>
+          <div class="drop-overlay" data-i18n="dropHere">Thả tệp vào đây</div>
+        </div>
+        <div class="toolbar">
+          <label class="btn ghost sm file-btn"><svg><use href="#i-upload"/></svg><span data-i18n="openFile">Mở tệp</span><input type="file" id="fileIn" accept=".txt,.csv,.tsv,.dat,.xyz,.kml,.geojson,.json,.zip,.shp,.dbf,.prj,.cpg" multiple hidden></label>
+          <button type="button" class="btn ghost sm" id="cleanBtn" data-i18n-title="cleanTip"><svg><use href="#i-wand"/></svg><span data-i18n="clean">Làm sạch</span></button>
+          <button type="button" class="btn ghost sm" id="sampleBtn"><svg><use href="#i-file"/></svg><span data-i18n="sample">Mẫu</span></button>
+          <button type="button" class="btn ghost sm" id="clearInBtn"><svg><use href="#i-x"/></svg><span data-i18n="clear">Xoá</span></button>
+        </div>
+        <div class="row-inline">
+          <label class="lbl" for="orderSel" data-i18n="order">Thứ tự cột</label>
+          <select id="orderSel"><option value="auto" data-i18n="orderAuto">Tự nhận</option><option value="ab" id="optAB">X, Y</option><option value="ba" id="optBA">Y, X</option></select>
+        </div>
+        <button type="button" class="btn primary block" id="convertBtn"><svg><use href="#i-check"/></svg><span data-i18n="convert">Chuyển đổi</span></button>
+        <div id="multiStats" class="stats" aria-live="polite"></div>
+        <div id="resultWrap" class="stack" hidden>
+          <div class="table-wrap"><table id="resTable"><thead></thead><tbody></tbody></table></div>
+          <div class="export-grid">
+            <button type="button" class="btn sm" data-export="res-csv"><svg><use href="#i-download"/></svg>CSV</button>
+            <button type="button" class="btn sm" data-export="res-kml"><svg><use href="#i-download"/></svg>KML…</button>
+            <button type="button" class="btn sm" data-export="res-geojson"><svg><use href="#i-download"/></svg>GeoJSON</button>
+            <button type="button" class="btn sm" data-export="res-shp"><svg><use href="#i-download"/></svg>SHP…</button>
+            <button type="button" class="btn sm" data-export="res-dxf"><svg><use href="#i-download"/></svg>DXF…</button>
+            <button type="button" class="btn sm" data-export="res-png" data-i18n-title="exportImg"><svg><use href="#i-image"/></svg>PNG</button>
+          </div>
+          <div class="row-inline wrap">
+            <span class="lbl" data-i18n="toDraw">Đưa vào lớp vẽ</span>
+            <button type="button" class="btn ghost sm" data-promote="Point"><svg><use href="#i-point"/></svg><span data-i18n="asPoints">Điểm</span></button>
+            <button type="button" class="btn ghost sm" data-promote="LineString"><svg><use href="#i-line"/></svg><span data-i18n="asLine">Đường</span></button>
+            <button type="button" class="btn ghost sm" data-promote="Polygon"><svg><use href="#i-poly"/></svg><span data-i18n="asPoly">Vùng</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DRAW -->
+    <section class="tab-pane" data-pane="draw">
+      <div class="tools" role="toolbar">
+        <button type="button" class="tool active" data-tool="select"><svg><use href="#i-cursor"/></svg><span data-i18n="toolSelect">Chọn</span></button>
+        <button type="button" class="tool" data-tool="Point"><svg><use href="#i-point"/></svg><span data-i18n="toolPoint">Điểm</span></button>
+        <button type="button" class="tool" data-tool="LineString"><svg><use href="#i-line"/></svg><span data-i18n="toolLine">Đường</span></button>
+        <button type="button" class="tool" data-tool="Polygon"><svg><use href="#i-poly"/></svg><span data-i18n="toolPoly">Vùng</span></button>
+      </div>
+      <p class="hint" id="toolHint"></p>
+      <div class="list-head">
+        <span><b id="featCount">0</b> <span data-i18n="features">đối tượng</span></span>
+        <label class="btn ghost sm file-btn"><svg><use href="#i-upload"/></svg><span data-i18n="import">Nhập KML/GeoJSON/SHP</span><input type="file" id="importIn" accept=".kml,.geojson,.json,.zip,.shp,.dbf,.prj,.cpg" multiple hidden></label>
+      </div>
+      <ul id="featList" class="feat-list"></ul>
+      <div class="export-grid">
+        <button type="button" class="btn sm" data-export="feat-csv"><svg><use href="#i-download"/></svg>CSV</button>
+        <button type="button" class="btn sm" data-export="feat-kml"><svg><use href="#i-download"/></svg>KML…</button>
+        <button type="button" class="btn sm" data-export="feat-geojson"><svg><use href="#i-download"/></svg>GeoJSON</button>
+        <button type="button" class="btn sm" data-export="feat-shp"><svg><use href="#i-download"/></svg>SHP…</button>
+            <button type="button" class="btn sm" data-export="feat-dxf"><svg><use href="#i-download"/></svg>DXF…</button>
+            <button type="button" class="btn sm" data-export="feat-png" data-i18n-title="exportImg"><svg><use href="#i-image"/></svg>PNG</button>
+      </div>
+      <button type="button" class="btn ghost danger sm" id="clearFeat"><svg><use href="#i-trash"/></svg><span data-i18n="clearAll">Xoá tất cả</span></button>
+    </section>
+
+    <!-- INFO -->
+    <section class="tab-pane info" data-pane="info">
+      <div data-lang-block="vi">
+        <h3>Tham số</h3>
+        <p>VN-2000 → WGS84 theo TT 973/2001/TT-TCĐC, EPSG:6960, quy ước <b>Coordinate Frame</b> như QGIS/PROJ. Khớp PROJ trong 1,1 mm. Phần mềm cũ dùng Position Vector lệch ≈ 0,7 m, có thể chọn bên dưới.</p>
+      </div>
+      <div data-lang-block="en">
+        <h3>Parameters</h3>
+        <p>VN-2000 → WGS84 from Circular 973/2001/TT-TCĐC, EPSG:6960, <b>Coordinate Frame</b> convention as in QGIS/PROJ. Matches PROJ within 1.1 mm. Legacy software using Position Vector differs by ≈ 0.7 m; selectable below.</p>
+      </div>
+      <dl class="kv">
+        <dt>ΔX ΔY ΔZ (m)</dt><dd>−191.90441429 −39.30318279 −111.45032835</dd>
+        <dt>ωx ωy ωz (″)</dt><dd>−0.00928836 0.01975479 −0.00427372</dd>
+        <dt>k (ppm)</dt><dd>0.252906278</dd>
+        <dt data-i18n="ellipsoid">Ellipsoid</dt><dd>WGS84 6378137 · 1/298.257223563</dd>
+      </dl>
+      <div class="row-inline">
+        <label class="lbl" for="convSel" data-i18n="convention">Quy ước xoay</label>
+        <select id="convSel"><option value="cf">Coordinate Frame (EPSG 9607)</option><option value="pv">Position Vector (9606)</option></select>
+      </div>
+      <h3 data-i18n="provTable">Kinh tuyến trục 34 tỉnh/thành</h3>
+      <input type="search" id="provSearch" class="search" data-i18n-ph="searchProv" aria-label="Search province">
+      <div class="table-wrap short"><table id="provTable"><thead><tr><th data-i18n="province">Tỉnh/thành</th><th data-i18n="mergedFrom">Hợp nhất từ</th><th class="num" data-i18n="meridian">KTT</th></tr></thead><tbody></tbody></table></div>
+      <p class="note" data-i18n="sourceNote"></p>
+      <h3 data-i18n="authorH">Tác giả</h3>
+      <address class="author">
+        <b>Trần Anh Quân</b> <span lang="en">(Quan Tran-Anh)</span><br>
+        <span data-i18n="affil1">Khoa Môi trường, Trường Đại học Mỏ - Địa chất (HUMG)</span><br>
+        <span data-i18n="affil2">REMOSAT Lab, Trường Đại học Khoa học và Công nghệ Hà Nội (USTH)</span><br>
+        <a href="mailto:quantrananh.humg@gmail.com">quantrananh.humg@gmail.com</a> · <a href="https://orcid.org/0000-0003-1201-0161">ORCID 0000-0003-1201-0161</a><br>
+        <a class="more" href="http://remosat.usth.edu.vn/~quanta/vn2000.html"><span data-i18n="aboutPage">Trang giới thiệu và cách trích dẫn</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </address>
+    </section>
+  </div>
+
+  <footer class="margin-foot">
+    <ul class="legend" aria-label="Legend">
+      <li><svg class="sym trig"><use href="#i-trig"/></svg><span data-i18n="lgConverted">Điểm đã chuyển</span></li>
+      <li><svg class="sym pt"><use href="#i-point"/></svg><span data-i18n="lgPoint">Điểm vẽ</span></li>
+      <li><i class="sym ln"></i><span data-i18n="lgLine">Đường</span></li>
+      <li><i class="sym pg"></i><span data-i18n="lgPoly">Vùng</span></li>
+    </ul>
+    <p class="copyright">© 2026 Trần Anh Quân (Quan Tran-Anh) · <span data-i18n="rights">Bảo lưu mọi quyền.</span></p>
+  </footer>
+</aside>
+
+<main class="sheet" id="sheet">
+  <div class="sheet-title" id="sheetTitle"></div>
+  <div id="map" role="application" aria-label="Map"></div>
+  <svg id="collar" aria-hidden="true"></svg>
+
+  <form id="gotoForm" class="goto" autocomplete="off" role="search">
+    <svg><use href="#i-search"/></svg>
+    <input id="gotoIn" type="text" data-i18n-ph="gotoPh" aria-label="Go to coordinate" spellcheck="false">
+  </form>
+
+  <div class="map-ctrl">
+    <div class="ctrl-group">
+      <button type="button" id="zoomIn" data-i18n-title="zoomIn"><svg><use href="#i-plus"/></svg></button>
+      <button type="button" id="zoomOut" data-i18n-title="zoomOut"><svg><use href="#i-minus"/></svg></button>
+    </div>
+    <div class="ctrl-group">
+      <button type="button" id="gridBtn" data-i18n-title="grid"><svg><use href="#i-grid"/></svg></button>
+      <button type="button" id="locateBtn" data-i18n-title="locate"><svg><use href="#i-locate"/></svg></button>
+      <button type="button" id="fitBtn" data-i18n-title="fitAll"><svg><use href="#i-fit"/></svg></button>
+      <button type="button" id="pngBtn" data-i18n-title="exportImg"><svg><use href="#i-image"/></svg></button>
+      <button type="button" id="layersBtn" data-i18n-title="basemap" aria-expanded="false"><svg><use href="#i-layers"/></svg></button>
+    </div>
+    <div class="basemaps" id="basemaps" hidden>
+      <button type="button" data-bm="sat" data-i18n="bmSat">Vệ tinh</button>
+      <button type="button" data-bm="hybrid" data-i18n="bmHybrid">Vệ tinh + nhãn</button>
+      <button type="button" data-bm="osm">OpenStreetMap</button>
+      <button type="button" data-bm="topo" data-i18n="bmTopo">Địa hình</button>
+    </div>
+  </div>
+
+  <div id="drawHud" class="draw-hud" hidden>
+    <span id="hudText"></span>
+    <button type="button" class="btn sm primary" id="hudFinish" data-i18n="finish">Hoàn tất</button>
+    <button type="button" class="btn sm ghost" id="hudCancel" data-i18n="cancel">Huỷ</button>
+  </div>
+
+  <div class="readout" id="readout" data-i18n-title="readoutTip" role="button" tabindex="0">
+    <span><b>WGS84</b> <code id="roWgs">—</code></span>
+    <span><b id="roVnLbl">VN-2000</b> <code id="roVn">—</code></span>
+    <span><b id="roUtmLbl">UTM</b> <code id="roUtm">—</code></span>
+  </div>
+</main>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<dialog id="kmlDlg">
+  <form method="dialog" class="dlg">
+    <header><h3 data-i18n="kmlOpts">Tùy chọn xuất KML</h3><button type="button" class="icon-btn dlg-close" aria-label="close"><svg><use href="#i-x"/></svg></button></header>
+    <div class="dlg-grid">
+      <label class="fld wide"><span data-i18n="docName">Tên tài liệu / tệp</span><input id="kDoc" type="text"></label>
+      <label class="fld wide" id="kGeomWrap"><span data-i18n="geomAs">Xuất điểm dưới dạng</span>
+        <select id="kGeom"><option value="Point" data-i18n="gPoints">Các điểm</option><option value="LineString" data-i18n="gLine">Đường nối các điểm</option><option value="Polygon" data-i18n="gPoly">Vùng khép kín</option><option value="all" data-i18n="gAll">Tất cả (điểm + đường + vùng)</option></select></label>
+      <label class="fld"><span data-i18n="icon">Biểu tượng</span>
+        <select id="kIcon"><option value="circle">Circle</option><option value="pin">Pushpin</option><option value="square">Square</option><option value="target">Target</option><option value="star">Star</option></select></label>
+      <label class="fld"><span data-i18n="pointColor">Màu điểm</span><input id="kPtColor" type="color" value="#ff5a1f"></label>
+      <label class="fld"><span data-i18n="iconScale">Cỡ biểu tượng</span><input id="kIconScale" type="number" min="0.3" max="4" step="0.1" value="1"></label>
+      <label class="fld"><span data-i18n="labelScale">Cỡ nhãn</span><input id="kLabelScale" type="number" min="0.3" max="4" step="0.1" value="0.9"></label>
+      <label class="fld"><span data-i18n="lineColor">Màu đường</span><input id="kLineColor" type="color" value="#ffd400"></label>
+      <label class="fld"><span data-i18n="lineWidth">Độ dày đường</span><input id="kLineWidth" type="number" min="1" max="10" step="0.5" value="2.5"></label>
+      <label class="fld"><span data-i18n="fillColor">Màu tô vùng</span><input id="kFillColor" type="color" value="#14b8a6"></label>
+      <label class="fld"><span data-i18n="fillOpacity">Độ mờ tô (%)</span><input id="kFillOp" type="number" min="0" max="100" step="5" value="30"></label>
+      <label class="chk"><input id="kLabels" type="checkbox" checked><span data-i18n="showLabels">Hiện nhãn tên</span></label>
+      <label class="chk"><input id="kDesc" type="checkbox" checked><span data-i18n="inclDesc">Mô tả kèm bảng tọa độ</span></label>
+      <label class="chk"><input id="kFolders" type="checkbox" checked><span data-i18n="useFolders">Nhóm theo thư mục</span></label>
+    </div>
+    <footer><button type="button" class="btn ghost dlg-close" data-i18n="cancel">Huỷ</button><button value="ok" class="btn primary"><svg><use href="#i-download"/></svg><span data-i18n="download">Tải KML</span></button></footer>
+  </form>
+</dialog>
+
+<dialog id="crsDlg">
+  <form method="dialog" class="dlg">
+    <header><h3 data-i18n="expCrsH">Hệ tọa độ xuất</h3><button type="button" class="icon-btn dlg-close" aria-label="close"><svg><use href="#i-x"/></svg></button></header>
+    <div class="dlg-grid">
+      <label class="chk"><input type="radio" name="xCrs" value="vn"><span id="xVnLbl">VN-2000</span></label>
+      <label class="chk"><input type="radio" name="xCrs" value="utm"><span data-i18n="expUtm">WGS84 / UTM (tự nhận múi)</span></label>
+      <label class="chk"><input type="radio" name="xCrs" value="wgs"><span data-i18n="expWgs">WGS84 (độ thập phân)</span></label>
+      <p class="note wide" data-i18n="expCrsNote"></p>
+    </div>
+    <footer><button type="button" class="btn ghost dlg-close" data-i18n="cancel">Huỷ</button><button value="ok" class="btn primary"><svg><use href="#i-download"/></svg><span id="xGo">Tải</span></button></footer>
+  </form>
+</dialog>
+
+<script src="vendor/leaflet/leaflet.min.js"></script>
+<script src="core.js"></script>
+<script src="shp.js"></script>
+<script src="i18n.js"></script>
+<script src="collar.js"></script>
+<script src="mapimage.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
