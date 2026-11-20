@@ -15,6 +15,9 @@ with sync_playwright() as p:
     pg.on("pageerror", lambda e: errors.append(str(e)))
     pg.on("console", lambda m: m.type == "error" and errors.append(m.text))
     pg.goto(url); pg.wait_for_timeout(1500)
+    # hybrid basemap: label layers must paint above the imagery (same z-index, later in DOM)
+    tiles = pg.evaluate("[...document.querySelectorAll('.leaflet-tile-pane > .leaflet-layer')].map(e => [+e.style.zIndex, e.querySelector('img')?.src || ''])")
+    assert len(tiles) == 3 and "World_Imagery" in tiles[0][1] and all(z >= tiles[0][0] for z, _ in tiles), tiles
     # single point: VN-2000 Hà Nội (105°00') pasted as a pair
     pg.fill("#inA", "2328573.123   588612.456"); pg.dispatch_event("#inA", "input")
     single = pg.inner_text("#singleOut"); assert "UTM" in single and "21." in single, single

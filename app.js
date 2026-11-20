@@ -128,7 +128,7 @@
   let baseLayers = [];
   function setBasemap(k) {
     if (!BASEMAPS[k]) k = 'hybrid';
-    baseLayers.forEach(l => map.removeLayer(l)); baseLayers = BASEMAPS[k]().map(l => l.addTo(map)); baseLayers.forEach(l => l.bringToBack());
+    baseLayers.forEach(l => map.removeLayer(l)); baseLayers = BASEMAPS[k]().map(l => l.addTo(map));   // added in order: imagery below, labels on top
     S.basemap = k; save(); $$('#basemaps button').forEach(b => b.classList.toggle('active', b.dataset.bm === k));
   }
   const resLayer = L.featureGroup().addTo(map), featLayer = L.featureGroup().addTo(map), vtxLayer = L.layerGroup().addTo(map);
