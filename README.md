@@ -48,7 +48,8 @@ Phụ thuộc: Leaflet 1.9.4 và font Overpass / Overpass Mono (SIL OFL 1.1), đ
 
 - Lưu trữ trên GitHub Pages (HTTPS, nên GPS và nút sao chép hoạt động); mỗi lần `git push` là triển khai. GitHub Actions chạy kiểm thử.
 - Địa chỉ cũ http://remosat.usth.edu.vn/~quanta/vn2000/ tự chuyển sang địa chỉ mới.
-- Dữ liệu vẽ và tùy chọn lưu trong trình duyệt (localStorage) của từng người dùng.
+- Dữ liệu vẽ và tùy chọn lưu trong trình duyệt (localStorage) của từng người dùng; dữ liệu ở địa chỉ cũ không tự chuyển sang địa chỉ mới.
+- Shapefile: đọc .zip (kể cả nén deflate) hoặc .shp + .dbf + .prj (+ .cpg); không có .prj thì giả định WGS84 (nếu số liệu là độ) hoặc VN-2000 đang chọn. Không hỗ trợ HN-72; lỗ trong vùng bị bỏ qua; tối đa 5000 đối tượng mỗi lần nhập.
 - Bản đồ nền: © Esri, Maxar, Earthstar Geographics; © OpenStreetMap contributors; © OpenTopoMap (CC-BY-SA).
 
 ## Bản quyền

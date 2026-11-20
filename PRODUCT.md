@@ -23,14 +23,15 @@ Built for the post-merger 34-province meridian table, with the VN-2000 7-paramet
 
 ## Operating Context
 
-Data arrives from Excel sheets, survey TXT/CSV, Word tables and KML; results go to AutoCAD/MicroStation (DXF), Google Earth (KML), QGIS (GeoJSON) and Excel (CSV). Vietnamese X = Northing, Y = Easting convention. Hosted as static files on the owner's academic web space (plain HTTP; geolocation and Clipboard API unavailable there without HTTPS).
+Data arrives from Excel sheets, survey TXT/CSV, Word tables, KML and shapefiles; results go to AutoCAD/MicroStation (DXF), Google Earth (KML), QGIS/ArcGIS (Shapefile, GeoJSON), Excel (CSV) and reports (PNG map image). Vietnamese X = Northing, Y = Easting convention. Hosted on GitHub Pages over HTTPS (https://quanta1985.github.io/vn2000/, public repo, all rights reserved); the old academic-site URL redirects there.
 
 ## Capabilities and Constraints
 
 - Single-point live conversion; batch conversion with auto-correction and skipped-line report.
 - Map-first layout with satellite, satellite + labels, OSM and topo basemaps (no API keys); cursor readout in three systems; fly-to coordinate; GPS.
 - Draw points, lines, polygons; length/area on the VN-2000 grid; vertex editing; snapping to existing points.
-- Export KML (with styling options), CSV, GeoJSON, DXF R12; import KML/GeoJSON.
+- Export KML (with styling options), CSV, GeoJSON, Shapefile (.zip with .prj) and DXF R12 — SHP/DXF in VN-2000 (default), UTM or WGS84; import KML/GeoJSON/Shapefile.
+- Map image: one-click PNG of the current view framed like a map sheet (no paper-size layout or custom title yet; owner chose the simple version).
 - Bilingual: Vietnamese default, English.
 - Must keep: map-first layout (full-screen map with the working panel over it) — confirmed by owner.
 - Lai Châu meridian 103°00′ (sources conflict; flagged in the app).

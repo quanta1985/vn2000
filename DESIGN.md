@@ -225,7 +225,7 @@ The page itself never scrolls: the root is clipped to the viewport on sheet pape
 
 Over the map, inside the neatline: the fly-to field top-left (38px tall, up to 360px wide), the control column top-right (36px square buttons in stacked groups, 8px apart, basemap list opening below), the drawing HUD bottom-centre. Rhythm inside the column is tight and regular: 14px between pane sections, 12px between stacked rows, 6 to 8px between paired controls.
 
-**Phone (≤760px).** The map goes full-screen; side and bottom collar bands collapse (the top band shrinks to 26px and the left band keeps a 34px strip), the sheet title and readout are hidden and Leaflet's own scale line returns. The margin column becomes a bottom sheet 90dvh tall with a 4px double top rule and a drag handle, snapping to peek (104px visible), half (translated 42dvh) and full; gutters drop to 16px; export buttons go to two columns.
+**Phone (≤760px).** The map goes full-screen; side and bottom collar bands collapse (the top band shrinks to 26px and the left band keeps a 34px strip), the sheet title and readout are hidden and Leaflet's own scale line returns. The margin column becomes a bottom sheet 90dvh tall with a 4px double top rule and a drag handle, snapping to peek (104px visible), half (translated 42dvh) and full; gutters drop to 16px; export buttons stay in three columns (CSV, KML…, GeoJSON / SHP…, DXF…, PNG).
 
 ### Named Rules
 **The Framed Map Rule.** The map is never shown unframed on desktop: the neatline, its lettering and the cursor ticks are always drawn around it.
@@ -240,7 +240,7 @@ The paper is flat. The margin column, the collar and every block inside the colu
 - **Control lift** (`box-shadow: 0 2px 8px rgba(17, 17, 17, .18)`): fly-to field and map control groups.
 - **Popover lift** (`box-shadow: 0 4px 14px rgba(17, 17, 17, .22)`): basemap list and drawing HUD.
 - **Popup lift** (`box-shadow: 0 6px 20px rgba(17, 17, 17, .25)`): map popups.
-- **Dialog lift** (`box-shadow: 0 12px 40px rgba(17, 17, 17, .35)`, backdrop `rgba(17, 17, 17, .45)`): the KML options dialog.
+- **Dialog lift** (`box-shadow: 0 12px 40px rgba(17, 17, 17, .35)`, backdrop `rgba(17, 17, 17, .45)`): the KML options dialog and the export coordinate-system dialog (SHP/DXF).
 - **Sheet lift** (`box-shadow: 0 -8px 24px rgba(17, 17, 17, .22)`): the phone bottom sheet.
 - **Paper halo** (drop-shadow / text-shadow in sheet paper): map symbols and point labels, so they read on imagery like knocked-out print.
 
@@ -288,7 +288,10 @@ Square paper popup, 1px ink border, popup lift. A title (mono when it is a coord
 Square paper buttons (36px) stacked in 1px-ink groups with hairline separators, control lift shadow; toggled or expanded buttons fill with ink. The basemap list is a paper stack whose active row carries a 3px brown left bar.
 
 ### Collar (signature)
-An SVG drawn over the sheet from numbers only. Inner neatline 1px ink on the map edge; outer frame 2.5px ink 18px out; ticks 1.2px ink, 7px long on top and bottom, 5px on the sides; tick lettering in collar mono, side labels rotated to run along the edge; "km" unit in brown lettering in the top-left corner. Tick interval steps 100 m to 100 km (or 1′ to 10°) to give about six ticks per edge. The optional km grid joins equal values across the map in paper at 75% opacity. Cursor position is marked by 16px survey-red ticks (2px) on every drawn edge. The scale bar is four alternating ink/paper segments, 5px tall, sized to a round 1/2/5 length within 120px.
+An SVG drawn over the sheet from numbers only. Inner neatline 1px ink on the map edge; outer frame 2.5px ink 18px out; ticks 1.2px ink, 7px long on top and bottom, 5px on the sides; tick lettering in collar mono, side labels rotated to run along the edge; "km" unit in brown lettering in the top-left corner (grid mode only). A tick within 28px of a corner keeps its tick but drops its label, so nothing collides with the corner or the unit. Tick interval steps 100 m to 100 km (or 1′ to 10°) to give about six ticks per edge. The optional km grid joins equal values across the map in paper at 75% opacity. Cursor position is marked by 16px survey-red ticks (2px) on every drawn edge. The scale bar is four alternating ink/paper segments, 5px tall, sized to a round 1/2/5 length within 120px.
+
+### Exported map image (PNG)
+The same sheet, printed: the map view at 2× on sheet paper, framed by the identical collar primitives (drawn on a canvas instead of SVG, no cursor ticks). Top margin: the sheet title line in Overpass 700 13px at left, the date in mono 11px at right. Bottom collar: the scale bar at left, a north arrow (half-filled ink arrowhead, "N" in 700 10px) at right. Below: a legend row of only the symbol types present (same symbols and colours as the map, 12px labels), then a credit line and the basemap attribution in collar grey 10.5px. Map symbols and point labels keep their paper halo.
 
 ### Map symbology
 Converted points: red trig triangle with centre dot. Drawn points: red cross-hair circle; selected turns blue. Lines: 3px blue. Polygons: 3px green outline, 22% green fill. Selected feature: 3.5px ink, dashed 10/5. Drafting: 2.5px brown dashed 6/5 with paper vertices ringed in ink. Vertex handles: 11px paper squares, 2px ink border. All marks carry a paper halo.
